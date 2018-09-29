@@ -5,6 +5,7 @@ elgg_make_sticky_form('subscriptions/plans/edit');
 $guid = get_input('guid', null);
 $container_guid = get_input('container_guid', null);
 $title = get_input('title');
+$product_id = get_input('product_id');
 $description = get_input('description');
 $access_id = get_input('access_id', ACCESS_PUBLIC);
 $role = get_input('role', 0);
@@ -19,6 +20,7 @@ $entity = new SiteSubscriptionPlan($guid);
 
 $entity->access_id = $access_id;
 $entity->title = $title;
+$entity->product_id = $product_id;
 $entity->description = $description;
 $entity->setRole($role);
 $entity->setPlanType($plan_type);

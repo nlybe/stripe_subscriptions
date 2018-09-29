@@ -130,6 +130,14 @@ class SiteSubscriptionPlan extends ElggObject {
 	public function getPlanType() {
 		return $this->plan_type;
 	}
+        
+	public function setProductID($product_id = '') {
+		$this->$product_id = $product_id;
+	}
+        
+	public function getProductID() {
+            	return $this->product_id;
+	}        
 
 	public function setRole($role = '') {
 		$this->role = $role;
@@ -258,13 +266,14 @@ class SiteSubscriptionPlan extends ElggObject {
 	 * @return array
 	 */
 	public function exportAsStripeArray() {
-		$export = array(
+            	$export = array(
 			'id' => $this->getPlanId(),
 			'amount' => (int) $this->getPricing()->getStripePrice(),
 			'currency' => $this->getPricing()->getCurrency(),
 			'interval' => $this->getInterval(),
 			'interval_count' => $this->getIntervalCount(),
-			'name' => $this->title,
+			'nickname' => $this->title,
+                        'product' => $this->getProductID(),
 			'trial_period_days' => $this->getTrialPeriodDays(),
 			'metadata' => array(
 				'guid' => $this->guid,
@@ -273,8 +282,7 @@ class SiteSubscriptionPlan extends ElggObject {
 				'active' => ($this->isEnabled()) ? 'yes' : 'no',
 			)
 		);
-
-		return array_filter($export, function($e) {
+                return array_filter($export, function($e) {
 			return isset($e);
 		});
 	}

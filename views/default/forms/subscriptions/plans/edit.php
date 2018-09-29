@@ -10,6 +10,7 @@ $required = (!$entity) ? elgg_format_attributes(array(
 
 if ($entity instanceof SiteSubscriptionPlan) {
 	$title = $entity->title;
+        $product_id = $entity->product_id;
 	$description = $entity->description;
 	$plan_id = $entity->getPlanId();
 	$plan_type = $entity->getPlanType();
@@ -33,6 +34,20 @@ if ($entity instanceof SiteSubscriptionPlan) {
 			SiteSubscriptionPlan::PLAN_TYPE_SERVICE => elgg_echo('subscriptions:plans:plan_type:service'),
 		),
 		'required' => true,
+	));
+	?>
+</div>
+
+<div>
+	<label <?php echo $required ?>><?php echo elgg_echo('subscriptions:plans:product_id') ?></label>
+	<?php
+	echo elgg_view('input/text', array(
+		'name' => 'product_id',
+		'value' => elgg_extract('product_id', $vars, $product_id),
+		'required' => true,
+		'parsley-trigger' => 'keyup focusout',
+		'parsley-validation-minlength' => 1,
+		'parsley-minlength' => 1,
 	));
 	?>
 </div>

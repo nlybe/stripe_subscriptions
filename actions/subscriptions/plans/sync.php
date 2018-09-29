@@ -13,7 +13,7 @@ foreach ($plans as $plan) {
 
 	$plan_id = $plan->getPlanId();
 	$data = $plan->exportAsStripeArray();
-
+error_log('4 -->'.$data['product'].' - '.$plan_id);
 	$stripe = new StripeClient();
 	$stripe_plan = $stripe->getPlan($plan_id);
 
