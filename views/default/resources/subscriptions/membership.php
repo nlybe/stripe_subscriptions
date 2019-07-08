@@ -5,8 +5,12 @@ gatekeeper();
 $username = elgg_extract('username', $vars);
 $user = get_user_by_username($username);
 
+if (!$user) {
+	$user = elgg_get_logged_in_user_entity();
+}
+
 if (!$user || !$user->canEdit()) {
-	forward('', '404');
+	forward('', '404'); 
 }
 
 elgg_set_context('settings');
@@ -16,7 +20,7 @@ elgg_set_page_owner_guid($user->guid);
 $title = elgg_echo('subscriptions:membership:plan');
 $content = elgg_view('stripe_subscriptions/membership/plan', array(
 	'entity' => $user,
-		));
+));
 $sidebar = false;
 $filter = false;
 

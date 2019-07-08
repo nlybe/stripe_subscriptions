@@ -31,18 +31,22 @@
 			$roles = roles_get_all_selectable_roles();
 
 			foreach ($roles as $role) {
-				$roles_dropdown_options[$role->name] = $role->title;
+				// $roles_dropdown_options[$role->name] = $role->title;
+				$roles_dropdown_options[$role->name] = $role->getDisplayName();
 			}
-			$role_input = elgg_view('input/dropdown', array(
+
+			$role_input = elgg_view_field([
+				'#type' => 'dropdown', 
 				'name' => "plans[$plan->guid][role]",
 				'value' => $plan->getRole(),
 				'options_values' => $roles_dropdown_options,
-			));
+			]);
 		} else {
-			$role_input = elgg_view('input/text', array(
+			$role_input = elgg_view_field([
+				'#type' => 'text',
 				'name' => "plans[$plan->guid][role]",
 				'value' => $plan->getRole(),
-			));
+			]);
 		}
 
 		echo '<tr>';
@@ -51,7 +55,8 @@
 		echo '<td>' . $plan->getPricing()->getHumanAmount() . '</td>';
 		echo '<td>' . $plan->getCycle()->getLabel() . '</td>';
 		echo '<td>' . $role_input . '</td>';
-		echo '<td>' . elgg_view('input/dropdown', array(
+		echo '<td>' . elgg_view_field([
+			'#type' => 'dropdown',
 			'name' => "plans[$plan->guid][plan_type]",
 			'value' => $plan->getPlanType(),
 			'options_values' => array(
@@ -59,15 +64,16 @@
 				SiteSubscriptionPlan::PLAN_TYPE_SERVICE => elgg_echo('subscriptions:plans:plan_type:service'),
 			),
 			'required' => true
-		)) . '</td>';
-		echo '<td>' . elgg_view('input/dropdown', array(
+		]) . '</td>';
+		echo '<td>' . elgg_view_field([
+			'#type' => 'dropdown',
 			'name' => "plans[$plan->guid][enabled]",
 			'value' => ($plan->isEnabled()) ? 'enabled' : 'disabled',
 			'options_values' => array(
 				'enabled' => elgg_echo('subscriptions:plans:status:enabled'),
 				'disabled' => elgg_echo('subscriptions:plans:status:disabled'),
 			),
-		)) . '</td>';
+		]) . '</td>';
 		echo '<td>' . elgg_view_menu('entity', array(
 			'entity' => $plan,
 			'sort_by' => 'priority',
@@ -83,8 +89,9 @@
 
 <div class="elgg-foot mam">
 	<?php
-	echo elgg_view('input/submit', array(
+	echo elgg_view_field([
+		'#type' => 'submit',
 		'value' => elgg_echo('save')
-	));
+	]);
 	?>
 </div>

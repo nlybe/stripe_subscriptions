@@ -7,22 +7,20 @@ $plan_guid = get_input('plan_guid');
 $plan = get_entity($plan_guid);
 
 if (!$user) {
-	register_error(elgg_echo('subscriptions:membership:plan:error:no_user'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('subscriptions:membership:plan:error:no_user'));
 }
 
 if (!$plan instanceof SiteSubscriptionPlan || !$plan->isMembershipPlan()) {
-	register_error(elgg_echo('subscriptions:membership:plan:error:no_plan'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('subscriptions:membership:plan:error:no_plan'));
 }
 
 $stripe_token = get_input('stripe-token');
 stripe_create_card($user->guid, $stripe_token);
 
 if (stripe_subscriptions_subscribe_to_plan($user->guid, $plan->guid)) {
-	system_message(elgg_echo('subscriptions:membership:plan:success'));
+	return elgg_ok_response('', elgg_echo('subscriptions:membership:plan:success'), 'subscriptions');
 } else {
-	register_error(elgg_echo('subscriptions:membership:plan:error'));
+	return elgg_error_response(elgg_echo('subscriptions:membership:plan:error'));
 }
 
 forward('subscriptions');

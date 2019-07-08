@@ -7,7 +7,8 @@ $plans = get_input('plans', array());
 
 foreach ($plans as $guid => $options) {
 
-	$entity = new SiteSubscriptionPlan($guid);
+	// $entity = new SiteSubscriptionPlan($guid);
+	$entity = get_entity($guid);
 
 	$entity->setPlanType(elgg_extract('plan_type', $options, $entity->getPlanType()));
 	$entity->setRole(elgg_extract('role', $options, $entity->role));
@@ -26,8 +27,8 @@ foreach ($plans as $guid => $options) {
 	}
 
 	if (!$entity->save()) {
-		register_error(elgg_echo('subscriptions:plans:edit:error_manage', array($entity->title)));
 		$entity->showErrors();
+		elgg_error_response(elgg_echo('subscriptions:plans:edit:error_manage', array($entity->title)));
 	}
 }
 

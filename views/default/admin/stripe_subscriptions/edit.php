@@ -1,7 +1,8 @@
 <?php
 
 $guid = get_input('guid');
-$vars['entity'] = get_entity($guid);
+// $vars['entity'] = get_entity($guid);
+$vars['guid'] = $guid;
 
 $sticky_values = elgg_get_sticky_values('subscriptions/plans/edit');
 if (is_array($sticky_values)) {

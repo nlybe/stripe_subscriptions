@@ -14,7 +14,7 @@ function stripe_subscriptions_page_handler($page, $handler) {
 
 	elgg_set_page_owner_guid($user->guid);
 	
-	echo elgg_view('resources/subscriptions/membership', [
+	echo elgg_view('resources/subscriptions', [
 		'username' => $user->username,
 	]);
 	return true;

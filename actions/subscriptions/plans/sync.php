@@ -13,16 +13,17 @@ foreach ($plans as $plan) {
 
 	$plan_id = $plan->getPlanId();
 	$data = $plan->exportAsStripeArray();
-error_log('4 -->'.$data['product'].' - '.$plan_id);
+
 	$stripe = new StripeClient();
 	$stripe_plan = $stripe->getPlan($plan_id);
 
 	if (!$stripe_plan) {
 		if ($stripe->createPlan($data)) {
+			// return elgg_ok_response('', elgg_echo('subscriptions:plans:export:success', array($plan_id)), $entity->getURL());
 			system_message(elgg_echo('subscriptions:plans:export:success', array($plan_id)));
 		} else {
-			register_error(elgg_echo('subscriptions:plans:export:error', array($plan_id)));
 			$stripe->showErrors();
+			return elgg_error_response('subscriptions:plans:export:error', array($plan_id));
 		}
 	} else {
 		if (!$stripe->updatePlan($plan_id, $data)) {
@@ -37,13 +38,15 @@ $plans = $stripe->getPlans(100);
 $site = elgg_get_site_entity();
 if ($plans->data) {
 	foreach ($plans->data as $plan) {
+		
 		if (!stripe_subscriptions_get_plan_from_id($plan->id)) {
 
-			$site_plan = new SiteSubscriptionPlan();
+			$site_plan = new SiteSubscriptionPlan;
+			$site_plan->subtype = SiteSubscriptionPlan::SUBTYPE;
 			$site_plan->owner_guid = $site->guid;
 			$site_plan->container_guid = $site->guid;
 			$site_plan->access_id = ACCESS_PUBLIC;
-			$site_plan->title = $plan->name;
+			$site_plan->title = $plan->id;
 
 			if ($plan->metadata) {
 				foreach ($plan->metadata as $key => $value) {
@@ -58,8 +61,8 @@ if ($plans->data) {
 			$site_plan->setTrialPeriodDays($plan->trial_period_days);
 
 			if ($site_plan->save()) {
-				system_message(elgg_echo('subscriptions:plans:import:success', array($plan->id)));
 				$site_plan->disable("inactive plan");
+				return elgg_ok_response('', elgg_echo('subscriptions:plans:import:success', array($plan->id)), REFERER);
 			} else {
 				reigster_error(elgg_echo('subscriptions:plans:import:error', array($plan->id)));
 			}

@@ -10,4 +10,4 @@ if (file_exists("{$plugin_root}/vendor/autoload.php")) {
 require_once __DIR__ . '/lib/functions.php';
 require_once __DIR__ . '/lib/events.php';
 require_once __DIR__ . '/lib/hooks.php';
-require_once __DIR__ . '/lib/page_handlers.php';
+// require_once __DIR__ . '/lib/page_handlers.php';	// OBS

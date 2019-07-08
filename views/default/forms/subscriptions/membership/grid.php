@@ -15,6 +15,7 @@ $plan_type = SiteSubscriptionPlan::PLAN_TYPE_MEMBERSHIP;
 $role_names = elgg_extract('role_names', $vars, ELGG_ENTITIES_ANY_VALUE);
 
 $plans = stripe_subscriptions_get_plans($plan_type, $role_names);
+error_log(count($plans));
 
 $current_plan = stripe_subscriptions_get_membership_plan($user->guid);
 
@@ -41,6 +42,7 @@ foreach ($plans as $plan) {
 			echo '<label>';
 			if (elgg_is_active_plugin('roles')) {
 				$role_obj = roles_get_role_by_name($role);
+				// echo '<span>' . $role_obj->getDisplayName() . '</span>';
 				echo '<span>' . $role_obj->title . '</span>';
 			} else {
 				echo '<span>' . elgg_echo("subscriptions:roles:$role") . '</span>';

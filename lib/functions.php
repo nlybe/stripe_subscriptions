@@ -7,7 +7,7 @@
  */
 function stripe_subscriptions_get_plan_from_id($plan_id) {
 
-	$plans = elgg_get_entities_from_metadata(array(
+	$plans = elgg_get_entities(array(
 		'types' => 'object',
 		'subtypes' => SiteSubscriptionPlan::SUBTYPE,
 		'limit' => 1,
@@ -40,7 +40,7 @@ function stripe_subscriptions_get_plans($plan_type = null, $role_names = null, $
 			'name' => 'plan_type',
 			'value' => $plan_type
 		);
-		$getter = 'elgg_get_entities_from_metadata';
+		$getter = 'elgg_get_entities';
 	}
 
 	if ($role_names) {
@@ -48,7 +48,7 @@ function stripe_subscriptions_get_plans($plan_type = null, $role_names = null, $
 			'name' => 'role',
 			'value' => $role_names
 		);
-		$getter = 'elgg_get_entities_from_metadata';
+		$getter = 'elgg_get_entities';
 	}
 
 	if (is_array($params)) {

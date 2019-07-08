@@ -1,6 +1,6 @@
 <?php
 
-$english = array(
+return [
 	'admin:stripe_subscriptions' => 'Site Subscriptions',
 	'admin:stripe_subscriptions:settings' => 'Settings',
 	'admin:stripe_subscriptions:create' => 'Add a plan',
@@ -133,6 +133,4 @@ $english = array(
 	'subscriptions:notify:trial_ending:no_card' => '<b>You have not yet entered your billing information. Please do so as soon as possible, or your subscription will be cancelled.</b>',
 	'subscriptions:membership:plan:error:no_user' => "Invalid user ID",
 
-);
-
-add_translation('en', $english);
+];

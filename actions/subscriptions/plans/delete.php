@@ -9,14 +9,14 @@ if ($entity instanceof SiteSubscriptionPlan) {
 	$plan_id = $entity->getPlanId();
 
 	if ($entity->delete()) {
-		system_message(elgg_echo('subscriptions:plans:delete:success'));
-
-		// When the plan is deleted, also remove it from Stripe
+		// When the plan is deleted, also remove it from Stripe 
 		$stripe = new StripeClient();
 		$stripe->deletePlan($plan_id);
+
+		return elgg_ok_response('', elgg_echo('subscriptions:plans:delete:success'), REFERER);
 	}
 } else {
-	register_error(elgg_echo('subscriptions:plans:delete:error'));
+	return elgg_error_response(elgg_echo('subscriptions:plans:delete:error'));
 }
 
 forward(REFERER);

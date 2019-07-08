@@ -129,8 +129,8 @@ function stripe_subscriptions_router($hook, $type, $return, $params) {
 		return $return;
 	}
 
-	$site = elgg_get_site_entity();
-	if ($site->isPublicPage($url)) {
+	// $site = elgg_get_site_entity(); // OBS on Elgg 3.x
+	if (Elgg\Router\Middleware\WalledGarden::isPublicPage($url)) {
 		return $return;
 	}
 
@@ -149,7 +149,10 @@ function stripe_subscriptions_router($hook, $type, $return, $params) {
 			), false);
 
 	if ($require_subscriptions && !$require_subscriptions_exempt && !stripe_subscriptions_has_membership_subscription($user->guid)) {
-		forward('subscriptions/membership/' . $user->username);
+		$href = elgg_generate_url('default:stripe_subscriptions/subscriptions', [
+			'username' => $user->username,
+		]);
+		forward($href);
 	}
 
 	return $return;
@@ -231,7 +234,7 @@ function stripe_subscriptions_event_susbscription_updated($hook, $type, $return,
 				'object' => $subscription,
 			)),
 			elgg_view('output/url', array(
-				'href' => elgg_normalize_url('subscriptions/membership'),
+				'href' => elgg_generate_url('default:stripe_subscriptions/subscriptions'),
 			)),
 		));
 
@@ -300,7 +303,7 @@ function stripe_subscriptions_event_susbscription_deleted($hook, $type, $return,
 				'object' => $subscription,
 			)),
 			elgg_view('output/url', array(
-				'href' => elgg_normalize_url('subscriptions/membership'),
+				'href' => elgg_generate_url('default:stripe_subscriptions/subscriptions'),
 			)),
 		));
 
@@ -369,7 +372,7 @@ function stripe_subscriptions_event_susbscription_trial_ending($hook, $type, $re
 			'href' => elgg_normalize_url('billing/cards'),
 		)),
 		elgg_view('output/url', array(
-			'href' => elgg_normalize_url('subscriptions/membership'),
+			'href' => elgg_generate_url('default:stripe_subscriptions/subscriptions'),
 		)),
 	));
 
